@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>랜덤 수학 문제</title>
+</head>
+<body>
+    <h1>랜덤 수학 문제</h1>
+    <div id="problems"></div>
+    <div id="result"></div>
+    <button onclick="checkAnswers()">정답 확인</button>
+
+    <script>
+        const problems = [];
+        const answers = [];
+
+        for (let i = 0; i < 5; i++) {
+            let num1 = Math.floor(Math.random() * 10);
+            let num2 = Math.floor(Math.random() * 10);
+            let isAddition = Math.random() > 0.5;
+            
+            // 뺄셈인 경우 num1이 num2보다 크거나 같아야 함
+            if (!isAddition && num1 < num2) {
+                [num1, num2] = [num2, num1];
+            }
+            
+            const operator = isAddition ? '+' : '-';
+            const problem = `${num1} ${operator} ${num2}`;
+            problems.push(problem);
+            answers.push(isAddition ? num1 + num2 : num1 - num2);
+        }
+
+        const problemContainer = document.getElementById('problems');
+        problems.forEach((problem, index) => {
+            const problemElement = document.createElement('div');
+            problemElement.innerHTML = `${problem} = <input type="text" id="answer${index}">`;
+            problemContainer.appendChild(problemElement);
+        });
+
+        function checkAnswers() {
+            let correct = true;
+            for (let i = 0; i < 5; i++) {
+                const userAnswer = document.getElementById(`answer${i}`).value;
+                if (parseInt(userAnswer) !== answers[i]) {
+                    correct = false;
+                }
+            }
+
+            const resultDiv = document.getElementById('result');
+            if (correct) {
+                resultDiv.innerHTML = "<p style='color:green'>성공!</p>";
+            } else {
+                resultDiv.innerHTML = "<p style='color:red'>실패!</p>";
+            }
+        }
+    </script>
+</body>
+</html>
